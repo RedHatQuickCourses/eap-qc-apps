@@ -1,0 +1,30 @@
+# -- mode: ruby --
+# vi: set ft=ruby :
+# Load variables from the config file #
+config_file = File.join(File.dirname(FILE), "variables.yml")
+vars = YAML.load_file(config_file)
+Vagrant.configure("2") do |config|
+  # Global Configuration  #
+  #config.vm.box = "generic-x64/rhel9"
+  config.vm.box_url = "http://content.syslab.pnq2.redhat.com/content/aap/rhel9/metadata.json"
+  config.vm.box = "nshaik/rhel9"
+  config.vm.hostname = "server.example.com"
+  config.vm.network  "private_network", ip: vars['ctrl_ip'], name: vars['libvirt_bridge']
+  config.vm.provider "libvirt" do |libvirt|
+    libvirt.default_prefix = "new"
+    libvirt.memory = vars['memory']
+    libvirt.cpus = vars['cpus']
+  end
+  config.vm.define "jboss8default" do |node|
+    sub_username = "Your-Username"
+    sub_password = "Your-Password"
+    node.vm.provision "shell", inline: "sudo subscription-manager register --username #{sub_username} --password #{sub_password} --auto-attach --force"
+    node.vm.provision "shell", inline: <<-SHELL
+      sudo dnf install java-17-openjdk -y
+      sudo dnf groupinstall "Server with GUI" -y
+      sudo systemctl set-default graphical.target
+      sudo useradd -s /sbin/nologin jboss
+      sudo init 5
+  SHELL
+   end
+end
