@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<installation-data xmlns="urn:jboss:installer:record:1.0.0">
+    <admin-user username="admin"/>
+    <!-- TODO: CHANGE INSTALL PATH-->
+    <target-directory>/path/to/eap</target-directory>
+    <maven-repositories>
+        <maven-repository repository-id="jboss-eap-8.0-product-repository" repository-url="https://maven.repository.redhat.com/ga/"/>
+    </maven-repositories>
+    <selected-packages>
+        <package name="component_selection.eap"/>
+        <package name="component_selection.appclient"/>
+        <package name="component_selection.docs"/>
+        <package name="component_selection.modules"/>
+        <package name="component_selection.welcome"/>
+    </selected-packages>
+    <post-install-tasks>
+        <post-install-task name="add-admin"/>
+        <post-install-task name="add-credential-store"/>
+        <post-install-task name="add-jsf-module"/>
+        <post-install-task name="set-default-jsf-module"/>
+    </post-install-tasks>
+    <post-install-configs>
+        <post-install-config name="add-credential-store">
+            <attribute-list>
+                <attribute>
+                    <name>path</name>
+                    <!-- TODO: CHANGE PATH TO CREDENTIAL STORE-->
+                    <value>/path/to/credential.store</value>
+                </attribute>
+                <attribute>
+                    <name>storeName</name>
+                    <value>my-credential-store</value>
+                </attribute>
+            </attribute-list>
+        </post-install-config>
+        <post-install-config name="add-jsf-module">
+            <attribute-list>
+                <attribute>
+                    <name>makeDefault</name>
+                    <value>false</value>
+                </attribute>
+                <attribute>
+                    <name>jsfVersion</name>
+                    <value>4.0.2</value>
+                </attribute>
+                <attribute>
+                <!-- TODO: CHANGE PATH TO JSF CHANNEL-->
+                    <name>localChannelPath</name>
+                    <value>/home/rsriniva/eap-automated/jsf-repo</value>
+                </attribute>
+                <attribute>
+                    <name>jsfProject</name>
+                    <value>MyFaces</value>
+                </attribute>
+                <attribute>
+                    <name>remoteRepositoryUrls-0</name>
+                    <value>https://repo1.maven.org/maven2/</value>
+                </attribute>
+            </attribute-list>
+        </post-install-config>
+    </post-install-configs>
+</installation-data>
