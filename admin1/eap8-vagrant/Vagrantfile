@@ -5,9 +5,7 @@ config_file = File.join(File.dirname(FILE), "variables.yml")
 vars = YAML.load_file(config_file)
 Vagrant.configure("2") do |config|
   # Global Configuration  #
-  #config.vm.box = "generic-x64/rhel9"
-  config.vm.box_url = "http://content.syslab.pnq2.redhat.com/content/aap/rhel9/metadata.json"
-  config.vm.box = "nshaik/rhel9"
+  config.vm.box = "generic-x64/rhel9"
   config.vm.hostname = "server.example.com"
   config.vm.network  "private_network", ip: vars['ctrl_ip'], name: vars['libvirt_bridge']
   config.vm.provider "libvirt" do |libvirt|
