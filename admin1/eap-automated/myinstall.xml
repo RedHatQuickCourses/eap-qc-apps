@@ -46,7 +46,7 @@
                 <attribute>
                 <!-- TODO: CHANGE PATH TO JSF CHANNEL-->
                     <name>localChannelPath</name>
-                    <value>/home/rsriniva/eap-automated/jsf-repo</value>
+                    <value>/path/to/jsf-repo</value>
                 </attribute>
                 <attribute>
                     <name>jsfProject</name>
