@@ -1,0 +1,6 @@
+---
+# Variables related to Vagrant setup #
+memory: 9000
+cpus: 2
+ctrl_ip: "172.25.123.10"
+libvirt_bridge: "internal"
