@@ -1,0 +1,45 @@
+--- /home/jboss/jboss-eap-8.0-standalone-udp-cluster/standalone/configuration/standalone-full-ha.xml	2024-05-07 11:55:15.141591001 +0530
++++ ../standalone/configuration/standalone-full-ha.xml	2024-05-07 12:43:07.310100180 +0530
+@@ -457,7 +457,7 @@
+         <subsystem xmlns="urn:jboss:domain:jdr:1.0"/>
+         <subsystem xmlns="urn:jboss:domain:jgroups:9.0">
+             <channels default="ee">
+-                <channel name="ee" stack="udp" cluster="ejb"/>
++                <channel name="ee" stack="tcpping" cluster="ejb"/>
+             </channels>
+             <stacks>
+                 <stack name="udp">
+@@ -492,6 +492,20 @@
+                     <protocol type="MFC"/>
+                     <protocol type="FRAG4"/>
+                 </stack>
++                <stack name="tcpping">
++                    <transport type="TCP" socket-binding="jgroups-tcp"/>
++                    <socket-discovery-protocol type="TCPPING" socket-bindings="jgroups-host-eap1 jgroups-host-eap2"/>
++                    <protocol type="MERGE3"/>
++                    <protocol type="FD_SOCK"/>
++                    <protocol type="FD_ALL"/>
++                    <protocol type="VERIFY_SUSPECT"/>
++                    <protocol type="pbcast.NAKACK2"/>
++                    <protocol type="UNICAST3"/>
++                    <protocol type="pbcast.STABLE"/>
++                    <protocol type="pbcast.GMS"/>
++                    <protocol type="MFC"/>
++                    <protocol type="FRAG3"/>
++                </stack>
+             </stacks>
+         </subsystem>
+         <subsystem xmlns="urn:jboss:domain:jmx:1.3">
+@@ -649,6 +663,12 @@
+         <socket-binding name="modcluster" multicast-address="${jboss.modcluster.multicast.address:224.0.1.105}" multicast-port="23364"/>
+         <socket-binding name="txn-recovery-environment" port="4712"/>
+         <socket-binding name="txn-status-manager" port="4713"/>
++        <outbound-socket-binding name="jgroups-host-eap1">
++            <remote-destination host="192.168.124.11" port="7600"/>
++        </outbound-socket-binding>
++        <outbound-socket-binding name="jgroups-host-eap2">
++            <remote-destination host="192.168.124.12" port="7600"/>
++        </outbound-socket-binding>
+         <outbound-socket-binding name="mail-smtp">
+             <remote-destination host="${jboss.mail.server.host:localhost}" port="${jboss.mail.server.port:25}"/>
+         </outbound-socket-binding>
