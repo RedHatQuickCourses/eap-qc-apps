@@ -1,0 +1,34 @@
+--- /tmp/standalone-load-balancer.xml.orig	2024-05-16 16:50:58.151544062 +0530
++++ /tmp/standalone-load-balancer.xml	2024-05-16 16:49:10.785282265 +0530
+@@ -203,10 +203,17 @@
+                 <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
+                 <http-listener name="management" socket-binding="mcmp-management" enable-http2="true"/>
+                 <host name="default-host" alias="localhost">
++                    <location name="/cluster" handler="cluster-handler"/>
+                     <filter-ref name="load-balancer"/>
+                 </host>
+             </server>
+             <servlet-container name="default"/>
++            <handlers>
++                <reverse-proxy name="cluster-handler">
++                    <host name="eap1" outbound-socket-binding="remote-eap1" scheme="ajp" instance-id="eap1" path="/cluster"/>
++                    <host name="eap2" outbound-socket-binding="remote-eap2" scheme="ajp" instance-id="eap2" path="/cluster"/>
++                </reverse-proxy>
++            </handlers>
+             <filters>
+                 <mod-cluster name="load-balancer" management-socket-binding="mcmp-management" advertise-socket-binding="modcluster" enable-http2="true" max-retries="3">
+                     <single-affinity/>
+@@ -232,5 +239,11 @@
+         <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993}"/>
+         <socket-binding name="mcmp-management" interface="private" port="${jboss.mcmp.port:8090}"/>
+         <socket-binding name="modcluster" interface="private" multicast-address="${jboss.modcluster.multicast.address:224.0.1.105}" multicast-port="23364"/>
++        <outbound-socket-binding name="remote-eap1">
++            <remote-destination host="192.168.124.11" port="8009"/>
++        </outbound-socket-binding>
++        <outbound-socket-binding name="remote-eap2">
++            <remote-destination host="192.168.124.12" port="8009"/>
++        </outbound-socket-binding>
+     </socket-binding-group>
+-</server>
+\ No newline at end of file
++</server>
